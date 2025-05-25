@@ -42,6 +42,12 @@ export interface ScreenshotOptions {
    * @default true
    */
   save?: boolean
+  /**
+   * Return only the path of the screenshot that would be created.
+   * Used internally for screenshot comparisons.
+   * @default false
+   */
+  pathOnly?: boolean
 }
 
 export interface BrowserCommands {
@@ -407,6 +413,8 @@ export interface Locator extends LocatorSelectors {
    * Make a screenshot of an element matching the locator.
    * @see {@link https://vitest.dev/guide/browser/locators#screenshot}
    */
+  screenshot(options: Omit<ScreenshotOptions, 'pathOnly'> & { pathOnly: true }): Promise<string>
+  screenshot(options: Omit<ScreenshotOptions, 'save'> & { save: false }): Promise<string>
   screenshot(options: Omit<LocatorScreenshotOptions, 'base64'> & { base64: true }): Promise<{
     path: string
     base64: string
@@ -559,6 +567,7 @@ export interface BrowserPage extends LocatorSelectors {
    * Make a screenshot of the test iframe or a specific element.
    * @returns Path to the screenshot file or path and base64.
    */
+  screenshot(options: Omit<ScreenshotOptions, 'pathOnly'> & { pathOnly: true }): Promise<string>
   screenshot(options: Omit<ScreenshotOptions, 'save'> & { save: false }): Promise<string>
   screenshot(options: Omit<ScreenshotOptions, 'base64'> & { base64: true }): Promise<{
     path: string

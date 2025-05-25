@@ -284,7 +284,7 @@ export const page: BrowserPage = {
     const number = screenshotIds[repeatCount]?.[taskName] ?? 1
 
     screenshotIds[repeatCount] ??= {}
-    screenshotIds[repeatCount][taskName] = number + 1
+    if (!options.pathOnly) screenshotIds[repeatCount][taskName] = number + 1
 
     const name
       = options.path || `${taskName.replace(/[^a-z0-9]/gi, '-')}-${number}.png`

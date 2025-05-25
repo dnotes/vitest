@@ -15,6 +15,7 @@ export const screenshot: BrowserCommand<[string, ScreenshotOptions]> = async (
     throw new Error(`Cannot take a screenshot without a test path`)
   }
 
+  options.pathOnly ??= false
   options.save ??= true
 
   if (!options.save) {
@@ -29,6 +30,11 @@ export const screenshot: BrowserCommand<[string, ScreenshotOptions]> = async (
         context.project.config,
       )
   const savePath = normalize(path)
+
+  if (options.pathOnly) {
+    return savePath
+  }
+
   await mkdir(dirname(path), { recursive: true })
 
   if (context.provider instanceof PlaywrightBrowserProvider) {

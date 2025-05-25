@@ -98,6 +98,8 @@
     "ws": "catalog:"
   },
   "devDependencies": {
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5",
     "@types/ws": "catalog:",
     "@vitest/runner": "workspace:*",
     "@vitest/ui": "workspace:*",
@@ -105,13 +107,16 @@
     "@wdio/protocols": "^9.14.0",
     "@wdio/types": "^9.14.0",
     "birpc": "catalog:",
+    "buffer": "^6.0.3",
     "flatted": "catalog:",
     "ivya": "^1.6.0",
     "mime": "^4.0.7",
     "pathe": "catalog:",
     "periscopic": "^4.0.2",
+    "pixelmatch": "^7.1.0",
     "playwright": "^1.52.0",
     "playwright-core": "^1.52.0",
+    "pngjs": "^7.0.0",
     "safaridriver": "^1.0.0",
     "vitest": "workspace:*",
     "webdriverio": "^9.14.0"

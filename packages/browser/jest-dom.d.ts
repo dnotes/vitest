@@ -1,6 +1,7 @@
 // Disable automatic exports.
 
 import { ARIARole } from './aria-role.ts'
+import { ScreenshotDiffOptions } from './src/client/tester/expect/toMatchScreenshot.js'
 
 export interface TestingLibraryMatchers<E, R> {
   /**
@@ -570,6 +571,57 @@ export interface TestingLibraryMatchers<E, R> {
    * @see https://vitest.dev/guide/browser/assertion-api#tobepartiallychecked
    */
   toBePartiallyChecked(): R
+/**
+   * @description
+   * This allows you to perform visual regression testing by comparing screenshots.
+   *
+   * The first time this assertion runs, it will fail but save a screenshot as the baseline.
+   * Screenshots should be committed to code repositories, for future comparison.
+   * On subsequent runs, it will compare the current screenshot with the baseline.
+   *
+   * The test passes if the difference between screenshots is within the specified maxiumums
+   * (maxDiffPercentage and maxDiffPixels). If the screenshots differ beyond these values,
+   * the test fails and diff images are generated to help visualize the differences.
+   *
+   * @example
+   * <div data-testid="header">
+   *   <h1>Welcome to my website</h1>
+   * </div>
+   *
+   * // Basic usage - will create a screenshot named after the test
+   * await expect.element(page.getByTestId('header')).toMatchScreenshot()
+   *
+   * // With custom filename
+   * await expect.element(page.getByTestId('header')).toMatchScreenshot({ filename: 'header-element' })
+   *
+   * // With custom thresholds for differences
+   * await expect.element(page.getByTestId('header')).toMatchScreenshot({
+   *   maxDiffPercentage: 0.1,  // Allow 0.1% difference
+   *   maxDiffPixels: 10        // Allow up to 10 pixels to be different
+   * })
+   *
+   * // With custom pixelmatch options
+   * await expect.element(page.getByTestId('header')).toMatchScreenshot({
+   *   threshold: 0.2,          // Matching threshold (0 to 1)
+   *   alpha: 0.5,              // Opacity of original image in diff output
+   *   diffColor: [255, 0, 0]   // Color of different pixels in the diff output
+   * })
+   *
+   * @param options
+   * @param {string} [options.filename] - Custom name for the screenshot file
+   * @param {string} [options.path] - Custom directory to store screenshots
+   * @param {number} [options.maxDiffPercentage=0] - Maximum allowed percentage of pixels that can be different
+   * @param {number} [options.maxDiffPixels=0] - Maximum allowed number of pixels that can be different
+   * @param {number} [options.threshold] - Matching threshold (0 to 1); smaller is more sensitive
+   * @param {boolean} [options.includeAA] - Whether to detect and ignore anti-aliased pixels
+   * @param {number} [options.alpha] - Opacity of original image in diff output
+   * @param {[number, number, number]} [options.aaColor] - Color of anti-aliased pixels in diff output
+   * @param {[number, number, number]} [options.diffColor] - Color of different pixels in diff output
+   * @param {[number, number, number]} [options.diffColorAlt] - Color of different pixels in alternating pattern
+   * @param {boolean} [options.diffMask] - Draw the diff as a mask where different pixels are opaque
+   * @see https://vitest.dev/guide/browser/assertion-api#toMatchScreenshot
+   */
+  toMatchScreenshot(options?:Partial<ScreenshotDiffOptions>): R
   /**
    * @description
    * This allows to assert that an element has a
