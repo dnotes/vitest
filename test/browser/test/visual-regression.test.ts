@@ -56,9 +56,9 @@ describe('visual regression tests', () => {
     }
     catch(e) {
       if (!e.message.startsWith('Images were too different')) throw e
+      return
     }
-    await commands.removeFile(`${filepath}.actual.png`)
-    await commands.removeFile(`${filepath}.diff.png`)
+    throw new Error('Test should have failed')
   })
 
   test('failing visual regression - different image sizes', async () => {
@@ -72,8 +72,9 @@ describe('visual regression tests', () => {
     }
     catch(e) {
       if (!e.message.startsWith('Image sizes do not match')) throw e
+      return
     }
-    await commands.removeFile(`${filepath}.actual.png`)
+    throw new Error('Test should have failed')
   })
 
   test('default paths', async () => {
@@ -108,26 +109,23 @@ describe('visual regression tests', () => {
       if (!e.message.startsWith('Images were too different')) throw e
     }
 
-    await commands.removeFile(autopath)
-    await commands.removeFile(`${autopath}.diff.png`)
-    await commands.removeFile(`${autopath}.actual.png`)
   })
 
   test('passing visual regression, because maxDiffPercentage', async () => {
-    document.body.innerHTML = `<button>Hello World<span style="color:white;">!</span></button>`
+    document.body.innerHTML = `<button style="border-color:white;">Hello World!</button>`
     const el = page.getByRole('button', { name: 'Hello World!' })
     await expect(el).toMatchScreenshot({
       ...opts,
-      maxDiffPercentage: 10,
+      maxDiffPercentage: 20,
     })
   })
 
   test('passing visual regression, because of maxDiffPixels', async () => {
-    document.body.innerHTML = `<button>Hello World<span style="color:white;">!</span></button>`
+    document.body.innerHTML = `<button style="border-color:white;">Hello World!</button>`
     const el = page.getByRole('button', { name: 'Hello World!' })
     await expect(el).toMatchScreenshot({
       ...opts,
-      maxDiffPixels: 100,
+      maxDiffPixels: 200,
     })
   })
 

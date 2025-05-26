@@ -74,7 +74,7 @@ export default async function toMatchScreenshot(
     matchResult = await screenshotDiff(actual, expected, options)
   }
   catch(e:any) {
-    await server.commands.writeFile(`${path}.actual.png`, actual.toString(), 'base64');
+    await locator.screenshot({ path:`${path}.actual.png` })
     return {
       pass: false,
       message: () => `${e.message}`,
@@ -89,7 +89,7 @@ export default async function toMatchScreenshot(
 
   // Otherwise, the test fails
   await server.commands.writeFile(`${path}.diff.png`, matchResult.diff.toString('base64'), 'base64');
-  await server.commands.writeFile(`${path}.actual.png`, actual.toString(), 'base64');
+  await locator.screenshot({ path:`${path}.actual.png` })
 
   return {
     pass: false,
