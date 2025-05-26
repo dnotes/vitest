@@ -5,7 +5,8 @@ import { Buffer } from 'buffer'
 import { PNG } from 'pngjs/browser'
 
 export type ScreenshotDiffOptions = {
-  path?:string
+  path?: string
+  perBrowser?: boolean
   maxDiffPercentage: number
   maxDiffPixels: number
   // this is in pixelmatch.PixelmatchOptions, as provided in @types/pixelmatch, but I can't seem to import in this project
@@ -33,13 +34,14 @@ export default async function toMatchScreenshot(
   if (locator instanceof Element) locator = page.elementLocator(locator)
 
   let {
-    // @ts-ignore
     path = '',
+    perBrowser = false,
     maxDiffPercentage = 0,
     maxDiffPixels = 0,
   } = options
 
   path = await locator.screenshot({ path, pathOnly:true })
+  if (perBrowser) path = path.replace(/\.png$/, `.${server.browser}.png`)
 
   // Get the expected image (or save a new one if none exists)
   let expected:Buffer

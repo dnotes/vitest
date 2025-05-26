@@ -129,4 +129,18 @@ describe('visual regression tests', () => {
     })
   })
 
+  test('visual regression tests per browser', async () => {
+    const el = page.getByRole('button', { name: 'Hello World!' })
+    try {
+      await expect(el).toMatchScreenshot({
+        ...opts,
+        perBrowser: true
+      })
+    }
+    catch(e) {
+      if (!e.message.startsWith('Visual regression test: ENOENT')) throw e
+    }
+    if (!commands.readFile(filepath.replace('.png', `.${server.browser}.png`))) throw new Error('Screenshot not found')
+  })
+
 })
